@@ -13,6 +13,14 @@ import br.gustavoakira.hotel.view.interfaces.HotelListView
 class HotelListFragment: ListFragment(), HotelListView{
     private val presenter = HotelListPresenter(this, MemoryRepository)
 
+    fun search(text: String){
+        presenter.searchHotels(text)
+    }
+
+    fun clearSearch(){
+        presenter.searchHotels("")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.searchHotels("")
@@ -39,4 +47,5 @@ class HotelListFragment: ListFragment(), HotelListView{
     interface OnHotelClick{
         fun onHotelClick(hotel: Hotel)
     }
+
 }
