@@ -14,9 +14,10 @@ import br.gustavoakira.hotel.view.HotelDetailsFragment
 import br.gustavoakira.hotel.view.HotelFormFragment
 import br.gustavoakira.hotel.view.HotelListFragment
 
-class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, HotelFormFragment.OnHotelSavedListener {
+class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, HotelListFragment.OnHotelDeletedListener, SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, HotelFormFragment.OnHotelSavedListener {
     private var lastSearchString: String = ""
     private var searchView: SearchView? = null
+    private var hotelIdSelected: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, Search
 
     override fun onHotelClick(hotel: Hotel) {
         if(isTablet()){
+            hotelIdSelected = hotel.id
             showDetailsFragment(hotel.id)
         }else {
             showDetailsActivity(hotel.id)
@@ -52,11 +54,13 @@ class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, Search
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putLong(EXTRA_HOTEL_ID_SELECTED, hotelIdSelected)
         outState.putString(EXTRA_SEARCH_TERM,lastSearchString)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
+        hotelIdSelected = savedInstanceState.getLong(EXTRA_HOTEL_ID_SELECTED)
         lastSearchString = savedInstanceState.getString(EXTRA_SEARCH_TERM) ?: ""
     }
 
@@ -100,6 +104,7 @@ class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, Search
 
     companion object{
         const val EXTRA_SEARCH_TERM = "lastSearch"
+        const val EXTRA_HOTEL_ID_SELECTED="lastSelectedId"
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -111,5 +116,14 @@ class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, Search
     }
     override fun onHotelSaved(hotel: Hotel) {
         listFragment.search(lastSearchString)
+    }
+
+    override fun onHotelsDeleted(hotels: List<Hotel>) {
+        if(hotels.find { it.id == hotelIdSelected } != null){
+            val fragment = supportFragmentManager.findFragmentByTag(HotelDetailsFragment.TAG_DETAILS)
+            if(fragment != null){
+                supportFragmentManager.beginTransaction().remove(fragment).commit()
+            }
+        }
     }
 }
