@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">hotel</string>
     <string name="error_not_found_hotel">Hotel não encontrado</string>
+    <string name="error_invalid_hotel">Hotel não preenchido corretamente</string>
     <string name="action_search">Pesquisar</string>
     <string name="action_new_hotel">Novo Hotel</string>
     <string name="action_info">Info</string>
     <string name="hint_search">Procurar por hotel</string>
+    <string name="form_label_name">Nome</string>
+    <string name="form_label_address">Endereço</string>
+    <string name="form_label_rating">Classificação</string>
 </resources>

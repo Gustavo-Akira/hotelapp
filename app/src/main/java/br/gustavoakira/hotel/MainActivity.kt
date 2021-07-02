@@ -9,10 +9,12 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import br.gustavoakira.hotel.model.Hotel
+import br.gustavoakira.hotel.view.AboutDialogFragment
 import br.gustavoakira.hotel.view.HotelDetailsFragment
+import br.gustavoakira.hotel.view.HotelFormFragment
 import br.gustavoakira.hotel.view.HotelListFragment
 
-class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, HotelFormFragment.OnHotelSavedListener {
     private var lastSearchString: String = ""
     private var searchView: SearchView? = null
 
@@ -98,5 +100,16 @@ class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, Search
 
     companion object{
         const val EXTRA_SEARCH_TERM = "lastSearch"
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_info -> AboutDialogFragment().show(supportFragmentManager, "sobre")
+            R.id.action_new -> HotelFormFragment.newInstance().open(supportFragmentManager)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+    override fun onHotelSaved(hotel: Hotel) {
+        listFragment.search(lastSearchString)
     }
 }
