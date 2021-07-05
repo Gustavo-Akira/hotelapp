@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import br.gustavoakira.hotel.databinding.ActivityMainBinding
 import br.gustavoakira.hotel.model.Hotel
 import br.gustavoakira.hotel.view.AboutDialogFragment
 import br.gustavoakira.hotel.view.HotelDetailsFragment
@@ -18,10 +19,17 @@ class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, HotelL
     private var lastSearchString: String = ""
     private var searchView: SearchView? = null
     private var hotelIdSelected: Long = -1
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding=ActivityMainBinding.inflate(layoutInflater)
+        binding.fabAdd.setOnClickListener{
+            listFragment.hideDeleteMode()
+            HotelFormFragment.newInstance().open(supportFragmentManager)
+        }
+        setContentView(binding.root)
     }
 
     override fun onHotelClick(hotel: Hotel) {
@@ -110,7 +118,6 @@ class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, HotelL
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.action_info -> AboutDialogFragment().show(supportFragmentManager, "sobre")
-            R.id.action_new -> HotelFormFragment.newInstance().open(supportFragmentManager)
         }
         return super.onOptionsItemSelected(item)
     }

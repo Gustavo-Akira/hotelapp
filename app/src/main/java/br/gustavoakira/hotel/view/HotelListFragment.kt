@@ -15,6 +15,7 @@ import br.gustavoakira.hotel.model.Hotel
 import br.gustavoakira.hotel.presenter.HotelListPresenter
 import br.gustavoakira.hotel.repository.MemoryRepository
 import br.gustavoakira.hotel.view.interfaces.HotelListView
+import com.google.android.material.snackbar.Snackbar
 
 class HotelListFragment: ListFragment(), HotelListView, AdapterView.OnItemLongClickListener, ActionMode.Callback{
     private val presenter = HotelListPresenter(this, MemoryRepository)
@@ -84,6 +85,12 @@ class HotelListFragment: ListFragment(), HotelListView, AdapterView.OnItemLongCl
         view?.post {
             actionMode?.title = resources.getQuantityString(R.plurals.list_hotel_selected, count, count)
         }
+    }
+
+    override fun showMessageHotelDeleted(count: Int) {
+        Snackbar.make(listView,getString(R.string.message_hotels_deleted,count),Snackbar.LENGTH_LONG).setAction(R.string.undo){
+            presenter.undoDelete()
+        }.show()
     }
 
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {

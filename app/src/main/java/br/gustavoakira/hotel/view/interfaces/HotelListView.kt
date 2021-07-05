@@ -9,4 +9,5 @@ interface HotelListView {
     fun hideDeleteMode()
     fun showSelectedHotels(hotels: List<Hotel>)
     fun updateSelectionCountText(count: Int)
+    fun showMessageHotelDeleted(count: Int)
 }

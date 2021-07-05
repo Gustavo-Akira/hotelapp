@@ -37,11 +37,11 @@ object MemoryRepository: HotelRepository{
     }
 
     override fun search(term: String, callback: (List<Hotel>) -> Unit) {
-        callback(
+        val resultList =
             if(term.isEmpty()) hotelList
-            else hotelList.filter {
+            else hotelList.filter{
                 it.name.uppercase().contains(term.uppercase())
             }
-        )
+        callback(resultList.sortedBy { it.name })
     }
 }
