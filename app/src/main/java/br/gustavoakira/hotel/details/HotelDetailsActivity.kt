@@ -1,13 +1,15 @@
-package br.gustavoakira.hotel
+package br.gustavoakira.hotel.details
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
-import br.gustavoakira.hotel.view.HotelDetailsFragment
+import br.gustavoakira.hotel.R
+import br.gustavoakira.hotel.form.HotelFormFragment
+import br.gustavoakira.hotel.model.Hotel
 
-class HotelDetailsActivity: AppCompatActivity(){
+class HotelDetailsActivity: AppCompatActivity(), HotelFormFragment.OnHotelSavedListener{
     private val hotelId: Long by lazy { intent.getLongExtra(EXTRA_HOTEL_ID, -1) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +18,18 @@ class HotelDetailsActivity: AppCompatActivity(){
         if(savedInstanceState == null){
             showHotelDetails()
         }
+    }
+    fun open(activity: Activity, hotelId: Long){
+        activity.startActivityForResult(
+            Intent(activity, HotelDetailsActivity::class.java).apply {
+                putExtra(EXTRA_HOTEL_ID, hotelId)
+            },0
+        )
+    }
+
+    override fun onHotelSaved(hotel: Hotel) {
+        setResult(RESULT_OK)
+        showHotelDetails()
     }
 
     private fun showHotelDetails(){

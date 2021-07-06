@@ -1,4 +1,4 @@
-package br.gustavoakira.hotel.view
+package br.gustavoakira.hotel.details
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,13 +8,15 @@ import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import br.gustavoakira.hotel.R
 import br.gustavoakira.hotel.databinding.FragmentHotelDetailsBinding
+import br.gustavoakira.hotel.form.HotelFormFragment
+import br.gustavoakira.hotel.form.HotelFormPresenter
 import br.gustavoakira.hotel.model.Hotel
-import br.gustavoakira.hotel.presenter.HotelDetailsPresenter
 import br.gustavoakira.hotel.repository.MemoryRepository
-import br.gustavoakira.hotel.view.interfaces.HotelDetailsView
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 class HotelDetailsFragment: Fragment(), HotelDetailsView {
-    private val presenter = HotelDetailsPresenter(MemoryRepository, this)
+    private val presenter: HotelDetailsPresenter by inject{ parametersOf(this) }
     private var hotel: Hotel? = null
     private var _binding: FragmentHotelDetailsBinding? = null
     private var shareActionProvider: ShareActionProvider? = null
@@ -66,6 +68,13 @@ class HotelDetailsFragment: Fragment(), HotelDetailsView {
             type="text/plain"
             putExtra(Intent.EXTRA_TEXT, text)
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.action_edit){
+            HotelFormFragment.newInstance(hotel?.id?:0).open(parentFragmentManager)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object{

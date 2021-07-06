@@ -1,19 +1,21 @@
-package br.gustavoakira.hotel
+package br.gustavoakira.hotel.common
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.widget.SearchView
+import br.gustavoakira.hotel.details.HotelDetailsActivity
+import br.gustavoakira.hotel.R
 import br.gustavoakira.hotel.databinding.ActivityMainBinding
 import br.gustavoakira.hotel.model.Hotel
-import br.gustavoakira.hotel.view.AboutDialogFragment
-import br.gustavoakira.hotel.view.HotelDetailsFragment
-import br.gustavoakira.hotel.view.HotelFormFragment
-import br.gustavoakira.hotel.view.HotelListFragment
+import br.gustavoakira.hotel.details.HotelDetailsFragment
+import br.gustavoakira.hotel.form.HotelFormFragment
+import br.gustavoakira.hotel.list.HotelListFragment
 
 class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, HotelListFragment.OnHotelDeletedListener, SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, HotelFormFragment.OnHotelSavedListener {
     private var lastSearchString: String = ""
@@ -110,9 +112,11 @@ class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, HotelL
         return true
     }
 
-    companion object{
-        const val EXTRA_SEARCH_TERM = "lastSearch"
-        const val EXTRA_HOTEL_ID_SELECTED="lastSelectedId"
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 0 && resultCode == Activity.RESULT_OK){
+            listFragment.search(lastSearchString)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -123,6 +127,10 @@ class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, HotelL
     }
     override fun onHotelSaved(hotel: Hotel) {
         listFragment.search(lastSearchString)
+        val detailsFragment = supportFragmentManager.findFragmentByTag(HotelDetailsFragment.TAG_DETAILS) as? HotelDetailsFragment
+        if(detailsFragment != null && hotel.id == hotelIdSelected){
+            showDetailsFragment(hotelIdSelected)
+        }
     }
 
     override fun onHotelsDeleted(hotels: List<Hotel>) {
@@ -132,5 +140,10 @@ class MainActivity : AppCompatActivity(), HotelListFragment.OnHotelClick, HotelL
                 supportFragmentManager.beginTransaction().remove(fragment).commit()
             }
         }
+    }
+
+    companion object{
+        const val EXTRA_SEARCH_TERM = "lastSearch"
+        const val EXTRA_HOTEL_ID_SELECTED="lastSelectedId"
     }
 }

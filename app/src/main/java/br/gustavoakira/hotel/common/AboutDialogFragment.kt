@@ -1,4 +1,4 @@
-package br.gustavoakira.hotel.view
+package br.gustavoakira.hotel.common
 
 import android.app.AlertDialog
 import android.app.Dialog

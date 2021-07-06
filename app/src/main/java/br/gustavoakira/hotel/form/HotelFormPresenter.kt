@@ -1,9 +1,7 @@
-package br.gustavoakira.hotel.presenter
+package br.gustavoakira.hotel.form
 
 import br.gustavoakira.hotel.model.Hotel
 import br.gustavoakira.hotel.repository.interfaces.HotelRepository
-import br.gustavoakira.hotel.validator.HotelValidator
-import br.gustavoakira.hotel.view.interfaces.HotelFormView
 import java.lang.Exception
 
 class HotelFormPresenter(

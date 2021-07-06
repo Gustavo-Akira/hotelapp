@@ -1,4 +1,4 @@
-package br.gustavoakira.hotel.view
+package br.gustavoakira.hotel.form
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,12 +12,12 @@ import androidx.fragment.app.FragmentManager
 import br.gustavoakira.hotel.R
 import br.gustavoakira.hotel.databinding.FragmentHotelFormBinding
 import br.gustavoakira.hotel.model.Hotel
-import br.gustavoakira.hotel.presenter.HotelFormPresenter
 import br.gustavoakira.hotel.repository.MemoryRepository
-import br.gustavoakira.hotel.view.interfaces.HotelFormView
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 class HotelFormFragment: DialogFragment(), HotelFormView {
-    private val presenter: HotelFormPresenter = HotelFormPresenter(this, MemoryRepository)
+    private val presenter: HotelFormPresenter by inject{ parametersOf(this) }
     private var _binding: FragmentHotelFormBinding? = null
     private val binding get() = _binding!!
 

@@ -1,8 +1,7 @@
-package br.gustavoakira.hotel.presenter
+package br.gustavoakira.hotel.list
 
 import br.gustavoakira.hotel.model.Hotel
 import br.gustavoakira.hotel.repository.interfaces.HotelRepository
-import br.gustavoakira.hotel.view.interfaces.HotelListView
 
 class HotelListPresenter(
     private val view: HotelListView,

@@ -7,6 +7,7 @@
     <string name="action_info">Info</string>
     <string name="action_share">Compartilhar</string>
     <string name="action_delete">Excluir</string>
+    <string name="action_edit">Editar</string>
     <string name="hint_search">Procurar por hotel</string>
     <string name="form_label_name">Nome</string>
     <string name="form_label_address">Endereço</string>

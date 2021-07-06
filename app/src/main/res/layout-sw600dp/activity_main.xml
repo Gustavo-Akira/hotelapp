@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:id="@+id/fragment_list"
-        android:name="br.gustavoakira.hotel.view.HotelListFragment"/>
+        android:name="br.gustavoakira.hotel.list.HotelListFragment"/>
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"

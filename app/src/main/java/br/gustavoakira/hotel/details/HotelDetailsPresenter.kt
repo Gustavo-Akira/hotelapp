@@ -1,7 +1,6 @@
-package br.gustavoakira.hotel.presenter
+package br.gustavoakira.hotel.details
 
 import br.gustavoakira.hotel.repository.interfaces.HotelRepository
-import br.gustavoakira.hotel.view.interfaces.HotelDetailsView
 
 class HotelDetailsPresenter(
     private val repository: HotelRepository,

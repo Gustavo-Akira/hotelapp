@@ -1,4 +1,4 @@
-package br.gustavoakira.hotel.view.interfaces
+package br.gustavoakira.hotel.list
 
 import br.gustavoakira.hotel.model.Hotel
 

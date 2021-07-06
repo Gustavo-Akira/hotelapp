@@ -1,4 +1,4 @@
-package br.gustavoakira.hotel.view
+package br.gustavoakira.hotel.list
 
 import android.os.Bundle
 import android.view.Menu
@@ -12,13 +12,14 @@ import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.ListFragment
 import br.gustavoakira.hotel.R
 import br.gustavoakira.hotel.model.Hotel
-import br.gustavoakira.hotel.presenter.HotelListPresenter
 import br.gustavoakira.hotel.repository.MemoryRepository
-import br.gustavoakira.hotel.view.interfaces.HotelListView
+import br.gustavoakira.hotel.repository.interfaces.HotelRepository
 import com.google.android.material.snackbar.Snackbar
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 class HotelListFragment: ListFragment(), HotelListView, AdapterView.OnItemLongClickListener, ActionMode.Callback{
-    private val presenter = HotelListPresenter(this, MemoryRepository)
+    private val presenter: HotelListPresenter by inject{ parametersOf(this) }
     private var actionMode: ActionMode? = null
 
     fun search(text: String){
@@ -41,7 +42,7 @@ class HotelListFragment: ListFragment(), HotelListView, AdapterView.OnItemLongCl
     }
 
     override fun showHotels(hotels: List<Hotel>) {
-        val adapter = ArrayAdapter<Hotel>(requireContext(), android.R.layout.simple_list_item_1, hotels)
+        val adapter = HotelAdapter(requireContext(), hotels)
         listAdapter = adapter
     }
 
