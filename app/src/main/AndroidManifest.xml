@@ -12,12 +12,6 @@
         android:theme="@style/Theme.Hotel"
         android:fullBackupContent="@xml/config_backup"
         >
-        <provider
-            android:name=".repository.sqlite.HotelProvider"
-            android:authorities="com.gustavoakira.hotel"
-            android:enabled="true"
-            android:exported="true"></provider>
-
         <activity android:name=".common.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

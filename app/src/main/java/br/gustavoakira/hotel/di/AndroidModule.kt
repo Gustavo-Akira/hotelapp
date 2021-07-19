@@ -1,37 +1,28 @@
 package br.gustavoakira.hotel.di
 
-import br.gustavoakira.hotel.details.HotelDetailsPresenter
-import br.gustavoakira.hotel.details.HotelDetailsView
-import br.gustavoakira.hotel.form.HotelFormPresenter
-import br.gustavoakira.hotel.form.HotelFormView
-import br.gustavoakira.hotel.list.HotelListPresenter
-import br.gustavoakira.hotel.list.HotelListView
+
+import br.gustavoakira.hotel.details.HotelDetailsModelView
+import br.gustavoakira.hotel.form.HotelFormModelView
+import br.gustavoakira.hotel.list.HotelListViewModel
 import br.gustavoakira.hotel.repository.interfaces.HotelRepository
-import br.gustavoakira.hotel.repository.sqlite.ProviderRepository
-import br.gustavoakira.hotel.repository.sqlite.SQLiteRepository
+import br.gustavoakira.hotel.repository.room.HotelDatabase
+import br.gustavoakira.hotel.repository.room.RoomRepository
+import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
+
 
 val androidModule = module {
     single { this }
     single {
-        ProviderRepository(context = get()) as HotelRepository
+        RoomRepository(HotelDatabase.getDatabase(context = get())) as HotelRepository
     }
-    factory { (view: HotelListView)->
-        HotelListPresenter(
-            view,
-            repository = get()
-        )
+    viewModel {
+        HotelListViewModel(repository = get())
     }
-    factory { (view: HotelDetailsView)->
-        HotelDetailsPresenter(
-            repository = get(),
-            view
-        )
+    viewModel {
+        HotelDetailsModelView(repository = get())
     }
-    factory { (view: HotelFormView)->
-        HotelFormPresenter(
-            view,
-            repository = get()
-        )
+    viewModel {
+        HotelFormModelView(repository = get())
     }
 }

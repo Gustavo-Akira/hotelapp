@@ -6,17 +6,15 @@ import android.view.*
 import androidx.appcompat.widget.ShareActionProvider
 import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import br.gustavoakira.hotel.R
 import br.gustavoakira.hotel.databinding.FragmentHotelDetailsBinding
 import br.gustavoakira.hotel.form.HotelFormFragment
-import br.gustavoakira.hotel.form.HotelFormPresenter
 import br.gustavoakira.hotel.model.Hotel
-import br.gustavoakira.hotel.repository.MemoryRepository
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HotelDetailsFragment: Fragment(), HotelDetailsView {
-    private val presenter: HotelDetailsPresenter by inject{ parametersOf(this) }
+class HotelDetailsFragment: Fragment(){
+    private val hotelDetailsModelView: HotelDetailsModelView by viewModel()
     private var hotel: Hotel? = null
     private var _binding: FragmentHotelDetailsBinding? = null
     private var shareActionProvider: ShareActionProvider? = null
@@ -25,7 +23,18 @@ class HotelDetailsFragment: Fragment(), HotelDetailsView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentHotelDetailsBinding.inflate(inflater, container, false)
-        presenter.loadHotelDetails(arguments?.getLong(EXTRA_HOTEL_ID,-1)?: -1)
+        val id = arguments?.getLong(EXTRA_HOTEL_ID,-1)?:-1
+        hotelDetailsModelView.loadHotelDetails(id).observe(viewLifecycleOwner, Observer { hotel->
+            if(hotel != null){
+                showHotelDetails(hotel)
+            }else{
+                activity?.supportFragmentManager
+                    ?.beginTransaction()
+                    ?.remove(this)
+                    ?.commit()
+                errorHotelNotFound()
+            }
+        })
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,14 +49,15 @@ class HotelDetailsFragment: Fragment(), HotelDetailsView {
         _binding = null
         super.onDestroy()
     }
-    override fun showHotelDetails(hotel: Hotel) {
+
+    private fun showHotelDetails(hotel: Hotel) {
         this.hotel = hotel
         binding.txtName.text = hotel.name
         binding.txtAddress.text = hotel.address
         binding.rtbRating.rating = hotel.rating
     }
 
-    override fun errorHotelNotFound() {
+    private fun errorHotelNotFound() {
         binding.txtName.text = getString(R.string.error_not_found_hotel)
         binding.txtAddress.visibility = View.GONE
         binding.rtbRating.visibility = View.GONE

@@ -9,7 +9,7 @@ import br.gustavoakira.hotel.R
 import br.gustavoakira.hotel.form.HotelFormFragment
 import br.gustavoakira.hotel.model.Hotel
 
-class HotelDetailsActivity: AppCompatActivity(), HotelFormFragment.OnHotelSavedListener{
+class HotelDetailsActivity: AppCompatActivity(){
     private val hotelId: Long by lazy { intent.getLongExtra(EXTRA_HOTEL_ID, -1) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,12 +26,6 @@ class HotelDetailsActivity: AppCompatActivity(), HotelFormFragment.OnHotelSavedL
             },0
         )
     }
-
-    override fun onHotelSaved(hotel: Hotel) {
-        setResult(RESULT_OK)
-        showHotelDetails()
-    }
-
     private fun showHotelDetails(){
         val fragment = HotelDetailsFragment.newInstance(hotelId)
         supportFragmentManager
